@@ -1,11 +1,5 @@
 import { shuffleArray } from "./utils";
 
-export enum Difficulty {
-    EASY = "easy",
-    MEDIUM = "medium",
-    HARD = "hard"
-}
-//exporta questão e especifica as suas variaveis
 export type Question ={
     category:string;
     correct_answer:string;
@@ -14,7 +8,13 @@ export type Question ={
     question:string;
     type:string;
 }
-//Queremos todas as respostas no mesmo local para adicionar ao UI 
+
+export enum Difficulty {
+    EASY = "easy",
+    MEDIUM = "medium",
+    HARD = "hard"
+}
+
 export type QuestionState = Question & { answers: string[]};
 
 
@@ -25,7 +25,7 @@ export const fetchQuizQuestions = async (amount: number, difficulty:Difficulty) 
     console.log(data)
     return data.results.map((question: Question) =>({
             ...question,
-            answer: shuffleArray([...question.incorrect_answers, question.correct_answer])
+            answers: shuffleArray([...question.incorrect_answers, question.correct_answer])
         }
     ))
 }
