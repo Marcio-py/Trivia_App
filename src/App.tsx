@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { fetchQuizQuestions } from "./API";
-// components
+// Components
 import QuestionCard from "./components/QuestionCard";
-//Types dificulty
+// types
 import { QuestionsState, Difficulty } from "./API";
+// Styles
+// import { GlobalStyle, Wrapper } from "./App.styles";
 
 export type AnswerObject = {
   question: string;
@@ -36,21 +38,21 @@ const App: React.FC = () => {
     setLoading(false);
   };
 
-  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const checkAnswer = (e: any) => {
     if (!gameOver) {
+      // User's answer
       const answer = e.currentTarget.value;
-      // Comparar com a resposra correcta
+      // Check answer against correct answer
       const correct = questions[number].correct_answer === answer;
-      // pontuar se a resposta estiver correcta
+      // Add score if answer is correct
       if (correct) setScore((prev) => prev + 1);
-      // armazenar resposta na array de respostas
+      // Save the answer in the array for user answers
       const answerObject = {
         question: questions[number].question,
         answer,
         correct,
         correctAnswer: questions[number].correct_answer,
       };
-
       setUserAnswers((prev) => [...prev, answerObject]);
     }
   };
@@ -67,20 +69,22 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="App">
+    <>
+      {/* <GlobalStyle /> */}
+      {/* <Wrapper> */}
       <h1>REACT QUIZ</h1>
       {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
         <button className="start" onClick={startTrivia}>
           Start
         </button>
       ) : null}
-      {!gameOver ? <p className="score">Score</p> : null}
-      {loading && <p>loading Question</p>}
-      {loading && !gameOver && (
+      {!gameOver ? <p className="score">Score: {score}</p> : null}
+      {loading ? <p>Loading Questions...</p> : null}
+      {!loading && !gameOver && (
         <QuestionCard
           questionNr={number + 1}
           totalQuestions={TOTAL_QUESTIONS}
-          question={questions[number].question} //Estamos a esta questão pegar do question state
+          question={questions[number].question}
           answers={questions[number].answers}
           userAnswer={userAnswers ? userAnswers[number] : undefined}
           callback={checkAnswer}
@@ -89,12 +93,13 @@ const App: React.FC = () => {
       {!gameOver &&
       !loading &&
       userAnswers.length === number + 1 &&
-      number !== TOTAL_QUESTIONS ? (
+      number !== TOTAL_QUESTIONS - 1 ? (
         <button className="next" onClick={nextQuestion}>
           Next Question
         </button>
       ) : null}
-    </div>
+      {/* </Wrapper> */}
+    </>
   );
 };
 
