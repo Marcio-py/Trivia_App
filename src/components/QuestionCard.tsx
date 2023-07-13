@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 
+import { AnswerObject } from "../App";
+
 //definir os tipos das props para este componente
 type Props = {
   question: string;
   answers: string[];
-  callback: any;
-  userAnswer: any;
+  callback: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  userAnswer: AnswerObject | undefined;
   questionNr: number;
   totalQuestions: number;
 };
@@ -22,15 +24,15 @@ const QuestionCard: React.FC<Props> = ({
   //Como estamos a usar tsx quando quisermos pegar expressões de react colocamos o codigo dentro de chavetas
   <div>
     <p className="number">
-      Question: {questionNr} / {totalQuestions}
+      Question: {questionNr}/{totalQuestions}
     </p>
     <p dangerouslySetInnerHTML={{ __html: question }} />
     <div>
       {answers.map((answer) => (
         <div key={answer}>
-          <button disabled={userAnswer} value={answer} onClick={callback}>
+          {/* <button disabled={userAnswer} value={answer} onClick={callback}>
             <span dangerouslySetInnerHTML={{ __html: answer }}></span>
-          </button>
+          </button> */}
         </div>
       ))}
     </div>

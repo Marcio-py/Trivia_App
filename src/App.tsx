@@ -3,9 +3,9 @@ import { fetchQuizQuestions } from "./API";
 // components
 import QuestionCard from "./components/QuestionCard";
 //Types dificulty
-import { QuestionState, Difficulty } from "./API";
+import { QuestionsState, Difficulty } from "./API";
 
-type AnswerObject = {
+export type AnswerObject = {
   question: string;
   answer: string;
   correct: boolean;
@@ -14,25 +14,21 @@ type AnswerObject = {
 
 const TOTAL_QUESTIONS = 10;
 
-function App() {
+const App: React.FC = () => {
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<QuestionState[]>([]);
+  const [questions, setQuestions] = useState<QuestionsState[]>([]);
   const [number, setNumber] = useState(0);
   const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(true);
 
-  console.log(questions);
-
   const startTrivia = async () => {
     setLoading(true);
     setGameOver(false);
-
     const newQuestions = await fetchQuizQuestions(
       TOTAL_QUESTIONS,
       Difficulty.EASY
     );
-
     setQuestions(newQuestions);
     setScore(0);
     setUserAnswers([]);
@@ -59,7 +55,16 @@ function App() {
     }
   };
 
-  const nextQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {};
+  const nextQuestion = () => {
+    // Move on to the next question if not the last question
+    const nextQ = number + 1;
+
+    if (nextQ === TOTAL_QUESTIONS) {
+      setGameOver(true);
+    } else {
+      setNumber(nextQ);
+    }
+  };
 
   return (
     <div className="App">
@@ -91,6 +96,6 @@ function App() {
       ) : null}
     </div>
   );
-}
+};
 
 export default App;
